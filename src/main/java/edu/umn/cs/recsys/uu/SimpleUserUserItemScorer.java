@@ -1,5 +1,7 @@
 package edu.umn.cs.recsys.uu;
 
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.longs.LongSortedSet;
 import org.grouplens.lenskit.basic.AbstractItemScorer;
 import org.grouplens.lenskit.data.dao.ItemEventDAO;
 import org.grouplens.lenskit.data.dao.UserEventDAO;
@@ -33,6 +35,18 @@ public class SimpleUserUserItemScorer extends AbstractItemScorer {
         SparseVector userVector = getUserRatingVector(user);
 
         // TODO Score items for this user using user-user collaborative filtering
+
+        // 1. Find the neighbors
+        // a. Find the users who has rated the item
+        long itemId = scores.keyDomain().firstLong();
+        LongSet itemUsers = this.itemDao.getUsersForItem(itemId); // users who rated itemId
+        // b. Iterate thru the users
+        for(long itemUserId:itemUsers){
+             // i. get the vector for the user in itemUsers
+            SparseVector itemUserVector = getUserRatingVector(itemUserId);
+            // ii. calculate the cosine between userVector and itemUserVector
+
+        }
 
         // This is the loop structure to iterate over items to score
         for (VectorEntry e: scores.fast(VectorEntry.State.EITHER)) {
