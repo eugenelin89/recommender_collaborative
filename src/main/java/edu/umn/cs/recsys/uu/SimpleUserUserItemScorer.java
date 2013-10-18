@@ -59,12 +59,11 @@ public class SimpleUserUserItemScorer extends AbstractItemScorer {
                 userSims.set(itemUserId, similarity);
             }
             LongArrayList sortedUsers = userSims.keysByValue(true);
-            // the neighbors are sortedUsers index 1 to 30 (index 0 is the target user)
             // now, we can calculate the score for user
             // a. find the denominator
             double numerator = 0;
             double denominator = 0;
-            int counter = 0;
+            int counter = 0; // count 30 neighbours
             int i = 0; // index
             while(counter<30){
 
