@@ -40,51 +40,55 @@ public class SimpleUserUserItemScorer extends AbstractItemScorer {
     @Override
     public void score(long user, @Nonnull MutableSparseVector scores) {
         SparseVector userVector = getUserRatingVector(user);
-        for (VectorEntry e: scores.fast(VectorEntry.State.EITHER)) {
-        // TODO Score items for this user using user-user collaborative filtering
-        // Find the neighbors
-        // a. Find the users who has rated the item
-        long itemId = e.getKey(); //scores.keyDomain().firstLong();
-        LongSet itemUsers = this.itemDao.getUsersForItem(itemId); // users who rated itemId
-        MutableSparseVector userSims = MutableSparseVector.create(itemUsers);  // collection of itemUser:similarity
-        userSims.fill(0);
-        // b. Iterate thru the users
-        for(long itemUserId:itemUsers){
-             // i. get the vector for the user in itemUsers
-            SparseVector itemUserVector = getUserRatingVector(itemUserId);
-            // ii. calculate the cosine between userVector and itemUserVector
-            double similarity = CalcSimilarity(userVector, itemUserVector);
-            userSims.set(itemUserId, similarity);
-        }
-        LongArrayList sortedUsers = userSims.keysByValue(true);
-        // the neighbors are sortedUsers index 1 to 30 (index 0 is the target user)
-
-        // now, we can calculate the score for user
-        // a. find the denominator
-        double numerator = 0;
-        double denominator = 0;
-        for(int i=1; i <=30; i++){
-            long neighborId = sortedUsers.get(i);
-            // s(u,v)
-            double neighborSimilarity = userSims.get(neighborId);
-            SparseVector neighborRatingVector = getUserRatingVector(neighborId);
-            // r
-            double neighborRating = neighborRatingVector.get(itemId);
-            // mu
-            double meanNeighborRating = neighborRatingVector.mean();
-
-            numerator += neighborSimilarity * (neighborRating - meanNeighborRating);
-            denominator += Math.abs(neighborSimilarity);
-        }
-
-        double score = userVector.mean() + (numerator/denominator);
-
-        //System.out.println(user + " - " + itemId + " - " + score );
-
-        scores.set(itemId, score);
 
         // This is the loop structure to iterate over items to score
+        for (VectorEntry e: scores.fast(VectorEntry.State.EITHER)) {
+            // TODO Score items for this user using user-user collaborative filtering
+            // Find the neighbors
+            // a. Find the users who has rated the item
+            long itemId = e.getKey(); //scores.keyDomain().firstLong();
+            LongSet itemUsers = this.itemDao.getUsersForItem(itemId); // users who rated itemId
+            MutableSparseVector userSims = MutableSparseVector.create(itemUsers);  // collection of itemUser:similarity
+            userSims.fill(0);
+            // b. Iterate thru the users
+            for(long itemUserId:itemUsers){
+                 // i. get the vector for the user in itemUsers
+                SparseVector itemUserVector = getUserRatingVector(itemUserId);
+                // ii. calculate the cosine between userVector and itemUserVector
+                double similarity = CalcSimilarity(userVector, itemUserVector);
+                userSims.set(itemUserId, similarity);
+            }
+            LongArrayList sortedUsers = userSims.keysByValue(true);
+            // the neighbors are sortedUsers index 1 to 30 (index 0 is the target user)
+            // now, we can calculate the score for user
+            // a. find the denominator
+            double numerator = 0;
+            double denominator = 0;
+            int counter = 0;
+            int i = 0; // index
+            while(counter<30){
 
+                long neighborId = sortedUsers.get(i++);
+
+                if(neighborId == user){
+                    continue;
+                }
+
+                // s(u,v)
+                double neighborSimilarity = userSims.get(neighborId);
+                SparseVector neighborRatingVector = getUserRatingVector(neighborId);
+                // r
+                double neighborRating = neighborRatingVector.get(itemId);
+                // mu
+                double meanNeighborRating = neighborRatingVector.mean();
+
+                numerator += neighborSimilarity * (neighborRating - meanNeighborRating);
+                denominator += Math.abs(neighborSimilarity);
+                counter++;
+            }
+
+            double score = userVector.mean() + (numerator/denominator);
+            scores.set(itemId, score);
         }
     }
 
