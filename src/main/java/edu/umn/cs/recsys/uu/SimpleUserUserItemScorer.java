@@ -40,11 +40,11 @@ public class SimpleUserUserItemScorer extends AbstractItemScorer {
     @Override
     public void score(long user, @Nonnull MutableSparseVector scores) {
         SparseVector userVector = getUserRatingVector(user);
-
+        for (VectorEntry e: scores.fast(VectorEntry.State.EITHER)) {
         // TODO Score items for this user using user-user collaborative filtering
         // Find the neighbors
         // a. Find the users who has rated the item
-        long itemId = scores.keyDomain().firstLong();
+        long itemId = e.getKey(); //scores.keyDomain().firstLong();
         LongSet itemUsers = this.itemDao.getUsersForItem(itemId); // users who rated itemId
         MutableSparseVector userSims = MutableSparseVector.create(itemUsers);  // collection of itemUser:similarity
         userSims.fill(0);
@@ -84,7 +84,6 @@ public class SimpleUserUserItemScorer extends AbstractItemScorer {
         scores.set(itemId, score);
 
         // This is the loop structure to iterate over items to score
-        for (VectorEntry e: scores.fast(VectorEntry.State.EITHER)) {
 
         }
     }
