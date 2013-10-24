@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Recommendation System with Collaborative Filtering : A recommender system prototype based on user-user collaborative filtering" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Recommendation System with Collaborative Filtering</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/eugenelin89/recommender_collaborative">View on GitHub</a>
+
+          <h1 id="project_title">Recommendation System with Collaborative Filtering</h1>
+          <h2 id="project_tagline">A recommender system prototype based on user-user collaborative filtering</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/eugenelin89/recommender_collaborative/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/eugenelin89/recommender_collaborative/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a>Setup</h2>
+
+<p>The system is built with LensKit, an open-source took kit for building recommenders.</p>
+
+<p>Requires the following:</p>
+
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html/">Java SE Development Kit 7</a></p>
+
+<p><a href="http://lenskit.grouplens.org/">LensKit</a></p>
+
+<p><a href="https://maven.apache.org/">Apache Maven</a></p>
+
+<p>Java IDE such as <a href="http://www.eclipse.org/">Eclipse</a> or <a href="http://www.jetbrains.com/idea/">IntelliJ IDEA</a>.</p>
+
+<h2>
+<a name="background" class="anchor" href="#background"><span class="octicon octicon-link"></span></a>Background</h2>
+
+<p>This recommendation system prototype uses user-user collaborative filtering.  <a href="http://en.wikipedia.org/wiki/Collaborative_filtering">Here for details.</a></p>
+
+<p>The algorithm is composed of the following steps.</p>
+
+<ol>
+<li><p>Compute user similarities by taking the cosine between the users’ mean-centered rating vectors (that is, subtract each user's mean rating from their rating vector, and compute the cosine between those two vectors). </p></li>
+<li><p>For each item’s score, use the 30 most similar users who have rated the item.</p></li>
+<li><p>Use mean-centering to normalize ratings for scoring by computing the weighted average of each neighbor’s offset from average and add the user’s average rating.</p></li>
+</ol><h2>
+<a name="test-drive" class="anchor" href="#test-drive"><span class="octicon octicon-link"></span></a>Test Drive</h2>
+
+<p>A set of test data is provided for movie ratings, but can be easily adopted for other domains.</p>
+
+<p>data/movie-titles.csv
+Maps Movie IDs to Movie Titles.</p>
+
+<p>data/ratings.csv
+Users and their movie ratings. Each line of the CSV file is ordered as: User ID, Movie ID, Rating</p>
+
+<p>data/users.csv
+Maps User ID to User Name.</p>
+
+<p>The test data is injected into the system in CBFMain.java in the method configureRecommender().</p>
+
+<p>Run the recommender with command similar to the following:
+run-uu 1024:77 1024:268 1024:462 1024:393 1024:36955 2048:77 2048:36955 2048:788</p>
+
+<p>For each pair, the first item is the User ID and the second pair is the Movie ID.</p>
+
+<p>Outputs associate score for each move/user pair.  With the test dataset, the following result is obtained.</p>
+
+<p>2048,788,3.8509,Mrs. Doubtfire (1993)
+2048,36955,3.9698,True Lies (1994)
+2048,77,4.8493,Memento (2000)
+1024,462,3.1082,Erin Brockovich (2000)
+1024,393,3.8722,Kill Bill: Vol. 2 (2004)
+1024,36955,2.3524,True Lies (1994)
+1024,77,4.3848,Memento (2000)
+1024,268,2.8646,Batman (1989)</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Recommendation System with Collaborative Filtering maintained by <a href="https://github.com/eugenelin89">eugenelin89</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-40958814-6");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
