@@ -1,9 +1,56 @@
-A Recommender System Prototype, using User-User Collaborative Filtering.
+Recommendation System with User-User Collaborative Filtering
+
+SETUP
 
 The system is built with LensKit, an open-source took kit for building recommenders.
 
 Requires the following:
-- LensKit
-- Apache Maven
-- Java IDE such as Eclipse or IntelliJ IDEA.
 
+Java SE Development Kit 7 (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+LensKit  (http://lenskit.grouplens.org)
+Apache Maven (https://maven.apache.org)
+Java IDE such as Eclipse (http://www.eclipse.org/) or IntelliJ IDEA (http://www.jetbrains.com/idea/).
+
+BACKGROUND
+
+This recommendation system prototype uses user-user collaborative filtering.  For detailed background, please refer to:
+http://en.wikipedia.org/wiki/Collaborative_filtering
+
+The algorithm is composed of the following steps.
+
+1. Compute user similarities by taking the cosine between the users’ mean-centered rating vectors (that is, subtract each user's mean rating from their rating vector, and compute the cosine between those two vectors). 
+
+2. For each item’s score, use the 30 most similar users who have rated the item.
+
+3. Use mean-centering to normalize ratings for scoring by computing the weighted average of each neighbor’s offset from average and add the user’s average rating.
+
+TEST DRIVE
+
+A set of test data is provided for movie ratings, but can be easily adopted for other domains.
+
+
+data/movie-titles.csv
+Maps Movie IDs to Movie Titles.
+
+data/ratings.csv
+Users and their movie ratings. Each line of the CSV file is ordered as: User ID, Movie ID, Rating
+
+data/users.csv
+Maps User ID to User Name.
+
+The test data is injected into the system in CBFMain.java in the method configureRecommender().
+
+Run the recommender with command similar to the following:
+run-uu 1024:77 1024:268 1024:462 1024:393 1024:36955 2048:77 2048:36955 2048:788
+
+For each pair, the first item is the User ID and the second pair is the Movie ID.
+
+Output from the above executiong command, using the test dataset:
+2048,788,3.8509,Mrs. Doubtfire (1993)
+2048,36955,3.9698,True Lies (1994)
+2048,77,4.8493,Memento (2000)
+1024,462,3.1082,Erin Brockovich (2000)
+1024,393,3.8722,Kill Bill: Vol. 2 (2004)
+1024,36955,2.3524,True Lies (1994)
+1024,77,4.3848,Memento (2000)
+1024,268,2.8646,Batman (1989)
