@@ -1,5 +1,8 @@
 Recommendation System with User-User Collaborative Filtering
 
+Project Page
+http://eugenelin89.github.io/recommender_collaborative/
+
 SETUP
 
 The system is built with LensKit, an open-source took kit for building recommenders.
